@@ -6,21 +6,27 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-repeat'
     Plug 'Hovushka/vim-monokai-tasty'
+    Plug 'pangloss/vim-javascript'
+    Plug 'MaxMEllon/vim-jsx-pretty'
+    Plug 'styled-components/vim-styled-components'
+    Plug 'elzr/vim-json'
+    Plug 'jparise/vim-graphql'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'mileszs/ack.vim'
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'mhinz/vim-startify'
     Plug 'tikhomirov/vim-glsl'
-    Plug 'kyazdani42/nvim-tree.lua'
+    Plug 'tomlion/vim-solidity'
     " Plug 'jesseleite/vim-noh'
+    Plug 'motemen/git-vim'
     Plug 'diepm/vim-rest-console'
     Plug 'vim-airline/vim-airline'
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'ryanoasis/vim-devicons'
     Plug 'mkitt/tabline.vim'
-    Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-    Plug 'nsf/gocode', { 'rtp': 'nvim' } 
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+    Plug 'mdempsky/gocode', {'rtp': 'nvim/', 'do': '~/.vim/plugged/gocode/nvim/symlink.sh'} 
     Plug 'tmsvg/pear-tree'
     Plug 'itchyny/lightline.vim'
     Plug 'josa42/vim-lightline-coc'
@@ -28,6 +34,11 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'Shougo/deoplete.nvim'
     Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
     Plug '907th/vim-auto-save'
+    Plug 'dmdque/solidity.vim'
+    Plug 'nvim-lua/completion-nvim'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'tpope/vim-fugitive'
+    Plug 'Xuyuanp/nerdtree-git-plugin'
     "Before v0.5
     " Plug 'luochen1990/rainbow'
     " Plug 'jackguo380/vim-lsp-cxx-highlight'
@@ -41,7 +52,11 @@ call plug#end()
 "Color scheme
 colorscheme vim-monokai-tasty       "Set theme
 let g:vim_monokai_tasty_italic=1    "Support italic
-let g:auto_save = 1 
+let g:airline_theme='monokai_tasty'                   " airline theme
+let g:lightline = { 'colorscheme': 'monokai_tasty' }  " lightline theme
+
+
+let g:auto_save = 0
 let g:go_version_warning = 0
 "Basic configuration
 set nocompatible		"No compatibility with Vi
@@ -67,6 +82,7 @@ set number relativenumber	"Relative line numbers with absolute current
 set nowrap linebreak nolist	"Break lines by words
 set showtabline=0		"Hide buffer list on top
 set cursorline			"Highlight current line
+set hlsearch
 set ignorecase			"Ignore case when searching
 set smartcase			"Case sensitive search if has uppercase letters
 set foldmethod=syntax		"Syntax folding
@@ -128,8 +144,8 @@ augroup basicgroup
         autocmd TermOpen * startinsert                          "Start terminal in insert mode
 augroup END
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeFocus<CR>
+nnoremap <C-t> :NERDTreeToggle %<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 "Plugins' configuration
 
@@ -276,67 +292,3 @@ augroup plugingroup
     autocmd!
     autocmd BufNewFile,BufRead *.rchit,*.rgen,*.rmiss set filetype=glsl
 augroup END
-let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
-let g:nvim_tree_highlight_opened_files = 1 "0 by default, will enable folder and file icon highlight for opened files/directories.
-let g:nvim_tree_root_folder_modifier = ':~' "This is the default. See :help filename-modifiers for more options
-let g:nvim_tree_add_trailing = 1 "0 by default, append a trailing slash to folder names
-let g:nvim_tree_group_empty = 1 " 0 by default, compact folders that only contain a single folder into one node in the file tree
-let g:nvim_tree_icon_padding = ' ' "one space by default, used for rendering the space between the icon and the filename. Use with caution, it could break rendering if you set an empty string depending on your font.
-let g:nvim_tree_symlink_arrow = ' >> ' " defaults to ' ➛ '. used as a separator between symlinks' source and target.
-let g:nvim_tree_respect_buf_cwd = 1 "0 by default, will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
-let g:nvim_tree_create_in_closed_folder = 1 "0 by default, When creating files, sets the path of a file when cursor is on a closed folder to the parent folder when 0, and inside the folder when 1.
-let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 } " List of filenames that gets highlighted with NvimTreeSpecialFile
-let g:nvim_tree_show_icons = {
-    \ 'git': 1,
-    \ 'folders': 0,
-    \ 'files': 0,
-    \ 'folder_arrows': 0,
-    \ }
-"If 0, do not show the icons for one of 'git' 'folder' and 'files'
-"1 by default, notice that if 'files' is 1, it will only display
-"if nvim-web-devicons is installed and on your runtimepath.
-"if folder is 1, you can also tell folder_arrows 1 to show small arrows next to the folder icons.
-"but this will not work when you set renderer.indent_markers.enable (because of UI conflict)
-
-" default will show icon by default if no icon is provided
-" default shows no icon by default
-let g:nvim_tree_icons = {
-    \ 'default': "",
-    \ 'symlink': "",
-    \ 'git': {
-    \   'unstaged': "✗",
-    \   'staged': "✓",
-    \   'unmerged': "",
-    \   'renamed': "➜",
-    \   'untracked': "★",
-    \   'deleted': "",
-    \   'ignored': "◌"
-    \   },
-    \ 'folder': {
-    \   'arrow_open': "",
-    \   'arrow_closed': "",
-    \   'default': "",
-    \   'open': "",
-    \   'empty': "",
-    \   'empty_open': "",
-    \   'symlink': "",
-    \   'symlink_open': "",
-    \   }
-    \ }
-
-nnoremap <C-n> :NvimTreeToggle<CR>
-nnoremap <leader>r :NvimTreeRefresh<CR>
-nnoremap <leader>n :NvimTreeFindFile<CR>
-" More available functions:
-" NvimTreeOpen
-" NvimTreeClose
-" NvimTreeFocus
-" NvimTreeFindFileToggle
-" NvimTreeResize
-" NvimTreeCollapse
-" NvimTreeCollapseKeepBuffers
-
-set termguicolors " this variable must be enabled for colors to be applied properly
-
-" a list of groups can be found at `:help nvim_tree_highlight`
-highlight NvimTreeFolderIcon guibg=blue
