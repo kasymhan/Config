@@ -1,5 +1,5 @@
 set fileencoding=utf-8 "VimScript files use UTF-8
-
+set noswapfile
 "Install plugins
 call plug#begin(stdpath('data') . '/plugged')
     Plug 'tpope/vim-commentary'
@@ -27,6 +27,7 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'mkitt/tabline.vim'
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     Plug 'mdempsky/gocode', {'rtp': 'nvim/', 'do': '~/.vim/plugged/gocode/nvim/symlink.sh'} 
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
     Plug 'tmsvg/pear-tree'
     Plug 'itchyny/lightline.vim'
     Plug 'josa42/vim-lightline-coc'
