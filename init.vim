@@ -18,7 +18,11 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'mhinz/vim-startify'
     Plug 'tikhomirov/vim-glsl'
     Plug 'tomlion/vim-solidity'
+    Plug 'stephpy/vim-yaml'
+    Plug 'ekalinin/Dockerfile.vim'
+    Plug 'https://github.com/preservim/tagbar'
     " Plug 'jesseleite/vim-noh'
+    Plug 'skywind3000/asyncrun.vim'
     Plug 'motemen/git-vim'
     Plug 'diepm/vim-rest-console'
     Plug 'vim-airline/vim-airline'
@@ -27,7 +31,7 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'mkitt/tabline.vim'
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     Plug 'mdempsky/gocode', {'rtp': 'nvim/', 'do': '~/.vim/plugged/gocode/nvim/symlink.sh'} 
-    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+    Plug 'skanehira/preview-markdown.vim'
     Plug 'tmsvg/pear-tree'
     Plug 'itchyny/lightline.vim'
     Plug 'josa42/vim-lightline-coc'
@@ -104,10 +108,10 @@ set shortmess+=c                "Don't pass messages to completion menu
 
 "Basic commands
 "Run terminal command in a split
-command! -nargs=* Term :split term://<args>
-
+command! -nargs=* Term :split term://zsh 
 "Basic mappings
 "Turn off ex mode
+nnoremap <F3> :AsyncRun ctags -R<CR>
 nnoremap Q <Nop>
 "Conform 'Y' to 'D' and 'C'
 nnoremap Y y$
